@@ -6,7 +6,7 @@ AeroRUL is an end-to-end predictive maintenance project built on NASA's CMAPSS j
 
 - Uses NASA CMAPSS run-to-failure engine sensor data across FD001-FD004.
 - Preprocesses engine telemetry with missing-value checks, Z-score outlier removal, and Min-Max scaling.
-- Produces a cleaned dataset with 98,196 rows and 28 columns.
+- Produces a processed dataset with 98,196 rows and 28 columns.
 - Includes direct PostgreSQL ingestion and RabbitMQ producer/consumer examples.
 - Provides a web interface scaffold for model metrics and Remaining Useful Life (RUL) predictions.
 
@@ -16,7 +16,7 @@ AeroRUL is an end-to-end predictive maintenance project built on NASA's CMAPSS j
 .
 |-- data/
 |   |-- raw/                    # Original CMAPSS train/test/RUL text files
-|   |-- preprocessed_data.csv   # Cleaned dataset used for verification/training
+|   |-- preprocessed_data.csv   # Processed dataset used for verification/training
 |   `-- readme.txt              # Original dataset notes
 |-- docs/
 |   `-- preprocessing_report.md
@@ -46,7 +46,7 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-Verify the cleaned dataset:
+Verify the processed dataset:
 
 ```bash
 python verify_data.py
@@ -97,7 +97,7 @@ The RabbitMQ consumer is a long-running worker. Stop it with `Ctrl+C` after the 
 
 ## Web Interface
 
-The `web_interface/` app is a public-facing AeroRUL showcase that can be hosted on Vercel. It is intentionally static-friendly: visitors can browse the overview, stack, workflow demo, results, and contribution notes without needing local Docker services.
+The `web_interface/` app presents the AeroRUL project as a Next.js site that can be hosted on Vercel. It includes the project overview, stack, workflow, results, and academic context.
 
 To deploy it on Vercel, set the project root to `web_interface/`, keep the build command as `npm run build`, and use the default Next.js output.
 
@@ -136,6 +136,10 @@ cd web_interface && npm run build
 ```
 
 Docker-backed verification was also run successfully with PostgreSQL and RabbitMQ containers. Direct ingestion created the expected PostgreSQL tables, and RabbitMQ producer/consumer ingestion drained `265,963` messages with matching row counts for all FD001-FD004 train/test/RUL tables.
+
+## Academic Context
+
+This was a school project during an ERASMUS exchange program at CNAM Paris.
 
 ## Dataset
 

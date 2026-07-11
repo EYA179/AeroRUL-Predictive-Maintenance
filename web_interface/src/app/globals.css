@@ -480,6 +480,10 @@ td:first-child {
   align-items: start;
 }
 
+.contribution-layout.single {
+  grid-template-columns: 1fr;
+}
+
 .contribution-grid article {
   min-height: 180px;
   padding: 22px;

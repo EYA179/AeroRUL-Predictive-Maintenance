@@ -46,16 +46,16 @@ const stackGroups = [
     items: ['Flask', 'Flask-CORS', 'Next.js', 'React', 'Tailwind CSS'],
   },
   {
-    title: 'Verification',
-    items: ['Dataset checks', 'Python compile checks', 'ESLint', 'Next build'],
+    title: 'Project Checks',
+    items: ['Dataset review', 'Python scripts', 'Frontend build', 'Docker services'],
   },
 ];
 
 const resultMetrics = [
-  { value: '98,196', label: 'cleaned rows', tone: 'mint' },
-  { value: '28', label: 'final columns', tone: 'amber' },
+  { value: '98,196', label: 'processed rows', tone: 'mint' },
+  { value: '28', label: 'dataset columns', tone: 'amber' },
   { value: '0', label: 'missing values', tone: 'coral' },
-  { value: '265,963', label: 'RabbitMQ messages verified', tone: 'indigo' },
+  { value: '265,963', label: 'RabbitMQ messages', tone: 'indigo' },
 ];
 
 const tableCounts = [
@@ -193,7 +193,7 @@ function OverviewTab() {
         <h2>A predictive maintenance pipeline for aircraft engine telemetry.</h2>
         <p>
           AeroRUL uses NASA CMAPSS run-to-failure data to show how raw sensor streams can become a
-          cleaned dataset, database tables, model training inputs, and a simple RUL prediction
+          prepared dataset, database tables, model training inputs, and a simple RUL prediction
           interface.
         </p>
         <div className="metric-strip">
@@ -218,7 +218,7 @@ function StackTab() {
         <h2>Built as a small, end-to-end data system.</h2>
         <p>
           The repo combines batch ingestion, streaming ingestion, preprocessing notebooks, model
-          artifacts, a Flask API, and a deployable Next.js public interface.
+          artifacts, a Flask API, and a Next.js interface.
         </p>
       </div>
       <div className="stack-grid">
@@ -242,11 +242,10 @@ function DemoTab() {
     <section className="demo-layout">
       <div className="section-copy">
         <span className="eyebrow">Demo and results</span>
-        <h2>The Docker-backed workflow was verified end to end.</h2>
+        <h2>Example end-to-end workflow.</h2>
         <p>
-          PostgreSQL and RabbitMQ containers were started locally, the producer published every row,
-          the consumer drained the queue, and the resulting PostgreSQL row counts matched each raw
-          FD dataset split.
+          PostgreSQL stores the loaded CMAPSS tables while RabbitMQ demonstrates the streaming path.
+          The same FD001-FD004 train, test, and RUL splits move through the ingestion flow.
         </p>
       </div>
 
@@ -263,8 +262,8 @@ function DemoTab() {
         <ResultChart />
         <div className="counts-panel">
           <div>
-            <span className="eyebrow">Verified table counts</span>
-            <h3>All RabbitMQ writes matched the expected source rows.</h3>
+            <span className="eyebrow">Dataset splits</span>
+            <h3>FD001-FD004 train, test, and RUL row counts.</h3>
           </div>
           <div className="table-wrap">
             <table>
@@ -296,29 +295,14 @@ function DemoTab() {
 
 function ContributionTab() {
   return (
-    <section className="contribution-layout">
+    <section className="contribution-layout single">
       <div className="section-copy narrow">
         <span className="eyebrow">Contribution</span>
-        <h2>School project, cleaned up as a portfolio-ready engineering case study.</h2>
+        <h2>School project during an ERASMUS exchange program at CNAM Paris.</h2>
         <p>
-          AeroRUL started as a Big Data Technologies school project. The public showcase focuses on
-          what was built, how the services communicate, what was verified, and which pieces can be
-          improved next.
+          AeroRUL was completed as a school project during an ERASMUS exchange program at CNAM
+          Paris.
         </p>
-      </div>
-      <div className="contribution-grid">
-        <article>
-          <h3>Implemented</h3>
-          <p>Data verification, PostgreSQL ingestion, RabbitMQ streaming, preprocessing report, Flask API, and Next.js interface.</p>
-        </article>
-        <article>
-          <h3>Verified</h3>
-          <p>Docker services, queue publishing and draining, PostgreSQL row counts, API database reads, file upload prediction, lint, and build.</p>
-        </article>
-        <article>
-          <h3>Future work</h3>
-          <p>Package model artifacts, add automated tests, publish a hosted API, and replace notebook-only model training with scripts.</p>
-        </article>
       </div>
     </section>
   );
@@ -342,13 +326,13 @@ export default function Home() {
             <span className="eyebrow">NASA CMAPSS RUL pipeline</span>
             <h1>AeroRUL Predictive Maintenance</h1>
             <p>
-              A public-facing showcase for an aircraft engine telemetry pipeline: ingestion,
-              preprocessing, model workflow, Docker verification, and a simple prediction interface.
+              An aircraft engine telemetry project covering ingestion, preprocessing, model workflow,
+              and remaining useful life prediction.
             </p>
             <div className="hero-actions" aria-label="Project highlights">
-              <span>PostgreSQL verified</span>
-              <span>RabbitMQ verified</span>
-              <span>Vercel-ready frontend</span>
+              <span>PostgreSQL</span>
+              <span>RabbitMQ</span>
+              <span>Next.js</span>
             </div>
           </div>
           <EngineDiagram />

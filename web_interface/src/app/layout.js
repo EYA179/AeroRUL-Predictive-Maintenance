@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: "AeroRUL Predictive Maintenance",
-  description: "Public showcase for a CMAPSS remaining useful life pipeline.",
+  description: "CMAPSS remaining useful life prediction pipeline.",
 };
 
 export default function RootLayout({ children }) {
