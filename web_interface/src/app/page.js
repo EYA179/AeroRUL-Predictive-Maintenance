@@ -411,6 +411,13 @@ export default function Home() {
               <span>PostgreSQL</span>
               <span>RabbitMQ</span>
               <span>Next.js</span>
+              <a
+                href="https://github.com/EYA179/AeroRUL-Predictive-Maintenance"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                GitHub Repo
+              </a>
             </div>
           </div>
           <EngineDiagram />
