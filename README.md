@@ -139,7 +139,7 @@ Docker-backed verification was also run successfully with PostgreSQL and RabbitM
 
 ## Academic Context
 
-This was a school project during an ERASMUS exchange program at CNAM Paris.
+This was a school project during an ERASMUS exchange program at CNAM Paris, as part of the USEES8 - Big Data Technologies for Connected Industries course.
 
 ## Dataset
 

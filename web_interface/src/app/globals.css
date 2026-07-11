@@ -271,6 +271,7 @@ h3 {
 .workflow-step,
 .stack-card,
 .contribution-grid article,
+.academic-card,
 .chart-panel,
 .counts-panel {
   border: 1px solid var(--b-light);
@@ -488,6 +489,34 @@ td:first-child {
   line-height: 1.55;
 }
 
+.academic-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.2rem;
+  padding: 1rem;
+}
+
+.academic-card img {
+  width: 112px;
+  height: auto;
+  flex: 0 0 auto;
+}
+
+.academic-card p {
+  margin-bottom: 0.35rem;
+  font-size: 0.88rem;
+}
+
+.academic-card p:last-child {
+  margin-bottom: 0;
+}
+
+.course-line {
+  color: var(--text);
+  font-weight: 500;
+}
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -586,5 +615,10 @@ td:first-child {
 
   .tabs {
     width: 100%;
+  }
+
+  .academic-card {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import React, { useMemo, useState } from 'react';
 
 const tabs = [
@@ -299,10 +300,18 @@ function ContributionTab() {
       <div className="section-copy narrow">
         <span className="eyebrow">Contribution</span>
         <h2>School project during an ERASMUS exchange program at CNAM Paris.</h2>
-        <p>
-          AeroRUL was completed as a school project during an ERASMUS exchange program at CNAM
-          Paris.
-        </p>
+        <div className="academic-card">
+          <Image src="/cnam-logo.svg" alt="CNAM Paris" width={140} height={28} />
+          <div>
+            <p>
+              AeroRUL was completed as a school project during an ERASMUS exchange program at CNAM
+              Paris.
+            </p>
+            <p className="course-line">
+              Part of the USEES8 - Big Data Technologies for Connected Industries course.
+            </p>
+          </div>
+        </div>
       </div>
     </section>
   );
