@@ -1,12 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 const tabs = [
   { id: 'overview', label: 'Overview' },
+  { id: 'data', label: 'Data Pipeline' },
+  { id: 'models', label: 'Model Results' },
   { id: 'stack', label: 'Stack' },
-  { id: 'demo', label: 'Demo and Results' },
   { id: 'contribution', label: 'Contribution' },
 ];
 
@@ -60,10 +61,32 @@ const resultMetrics = [
 ];
 
 const tableCounts = [
-  ['FD001', '20,631', '13,096', '100'],
-  ['FD002', '53,759', '33,991', '259'],
-  ['FD003', '24,720', '16,596', '100'],
-  ['FD004', '61,249', '41,214', '248'],
+  ['FD001', '20,631', '13,096', '100', '33,827'],
+  ['FD002', '53,759', '33,991', '259', '88,009'],
+  ['FD003', '24,720', '16,596', '100', '41,416'],
+  ['FD004', '61,249', '41,214', '248', '102,711'],
+];
+
+const processedFacts = [
+  ['Rows', '98,196'],
+  ['Columns', '28'],
+  ['Missing cells', '0'],
+  ['Train rows', '60,084'],
+  ['Test rows', '38,112'],
+  ['Max cycle', '362'],
+];
+
+const modelMetrics = [
+  ['XGBoost', '5.5723', '7.6938', '0.9876', '77.46%'],
+  ['Random Forest', '7.7917', '12.4993', '0.9672', '67.18%'],
+  ['SVR', '27.8765', '39.7768', '0.6679', '28.00%'],
+  ['LightGBM', '31.9470', '40.2227', '0.6604', '24.82%'],
+];
+
+const apiFacts = [
+  ['GET /api/data', 'Reads model result rows from the trainning_data_results table.'],
+  ['POST /api/rul', 'Accepts a numeric file upload and a selected RUL model name.'],
+  ['Model paths', 'Backend maps XGBoost, Random Forest, SVR, and LightGBM pickle files.'],
 ];
 
 function EngineDiagram() {
@@ -145,47 +168,6 @@ function WorkflowDiagram() {
   );
 }
 
-function ResultChart() {
-  const points = useMemo(
-    () => [
-      [0, 168],
-      [54, 154],
-      [108, 136],
-      [162, 118],
-      [216, 96],
-      [270, 78],
-      [324, 58],
-      [378, 42],
-    ],
-    []
-  );
-
-  const path = points.map(([x, y], index) => `${index === 0 ? 'M' : 'L'} ${x} ${y}`).join(' ');
-
-  return (
-    <div className="chart-panel">
-      <div>
-        <span className="eyebrow">Example RUL curve</span>
-        <h3>Predicted useful life trends downward as sensor degradation increases.</h3>
-      </div>
-      <svg viewBox="0 0 430 220" role="img" aria-label="Example RUL prediction curve">
-        <g className="grid-lines">
-          {[40, 80, 120, 160].map((y) => (
-            <line key={y} x1="24" y1={y} x2="408" y2={y} />
-          ))}
-        </g>
-        <path className="area" d={`${path} L 378 188 L 0 188 Z`} />
-        <path className="trend-line" d={path} />
-        {points.map(([x, y]) => (
-          <circle key={`${x}-${y}`} cx={x} cy={y} r="5" />
-        ))}
-        <text x="24" y="210">engine cycles</text>
-        <text x="20" y="26">RUL</text>
-      </svg>
-    </div>
-  );
-}
-
 function OverviewTab() {
   return (
     <section className="tab-grid">
@@ -207,6 +189,148 @@ function OverviewTab() {
         </div>
       </div>
       <WorkflowDiagram />
+    </section>
+  );
+}
+
+function DataTab() {
+  return (
+    <section className="demo-layout">
+      <div className="section-copy">
+        <span className="eyebrow">Data pipeline</span>
+        <h2>Raw CMAPSS files, ingestion paths, and checked-in processed data.</h2>
+        <p>
+          The raw folder contains FD001-FD004 train, test, and RUL files. The producer script sends
+          one RabbitMQ message per raw row, while direct ingestion writes PostgreSQL tables for each
+          dataset split.
+        </p>
+      </div>
+
+      <div className="metric-strip wide">
+        {resultMetrics.map((metric) => (
+          <div className={`metric ${metric.tone}`} key={metric.label}>
+            <strong>{metric.value}</strong>
+            <span>{metric.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="results-split">
+        <div className="counts-panel">
+          <div>
+            <span className="eyebrow">Raw file counts</span>
+            <h3>Rows published by the RabbitMQ producer from data/raw.</h3>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Dataset</th>
+                  <th>Train</th>
+                  <th>Test</th>
+                  <th>RUL</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableCounts.map(([dataset, train, test, rul, total]) => (
+                  <tr key={dataset}>
+                    <td>{dataset}</td>
+                    <td>{train}</td>
+                    <td>{test}</td>
+                    <td>{rul}</td>
+                    <td>{total}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="source-note">Source: data/raw files and ingestion/producer.py.</p>
+        </div>
+
+        <div className="counts-panel">
+          <div>
+            <span className="eyebrow">Processed CSV</span>
+            <h3>Verified summary for data/preprocessed_data.csv.</h3>
+          </div>
+          <div className="fact-grid">
+            {processedFacts.map(([label, value]) => (
+              <div className="fact" key={label}>
+                <span>{label}</span>
+                <strong>{value}</strong>
+              </div>
+            ))}
+          </div>
+          <p className="source-note">
+            Source: checked-in CSV. Sensor columns are Min-Max scaled between 0 and 1.
+          </p>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ModelsTab() {
+  return (
+    <section className="demo-layout">
+      <div className="section-copy">
+        <span className="eyebrow">Model results</span>
+        <h2>Notebook-recorded RUL regression results.</h2>
+        <p>
+          The model notebook computes RUL from each engine cycle, trains four regressors, and records
+          evaluation metrics on a 26,185 / 6,547 train-test split.
+        </p>
+      </div>
+
+      <div className="results-split">
+        <div className="counts-panel">
+          <div>
+            <span className="eyebrow">Evaluation metrics</span>
+            <h3>Lower MAE/RMSE is better; higher R2 and tolerance accuracy is better.</h3>
+          </div>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Model</th>
+                  <th>MAE</th>
+                  <th>RMSE</th>
+                  <th>R2</th>
+                  <th>Accuracy</th>
+                </tr>
+              </thead>
+              <tbody>
+                {modelMetrics.map(([model, mae, rmse, r2, accuracy]) => (
+                  <tr key={model}>
+                    <td>{model}</td>
+                    <td>{mae}</td>
+                    <td>{rmse}</td>
+                    <td>{r2}</td>
+                    <td>{accuracy}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="source-note">Source: output stored in notebooks/ml.ipynb.</p>
+        </div>
+
+        <div className="counts-panel">
+          <div>
+            <span className="eyebrow">Backend contract</span>
+            <h3>What the Flask API is wired to serve.</h3>
+          </div>
+          <div className="api-list">
+            {apiFacts.map(([label, value]) => (
+              <div className="api-row" key={label}>
+                <strong>{label}</strong>
+                <p>{value}</p>
+              </div>
+            ))}
+          </div>
+          <p className="source-note">Source: web_interface_be/server.py.</p>
+        </div>
+      </div>
     </section>
   );
 }
@@ -233,62 +357,6 @@ function StackTab() {
             </div>
           </article>
         ))}
-      </div>
-    </section>
-  );
-}
-
-function DemoTab() {
-  return (
-    <section className="demo-layout">
-      <div className="section-copy">
-        <span className="eyebrow">Demo and results</span>
-        <h2>Example end-to-end workflow.</h2>
-        <p>
-          PostgreSQL stores the loaded CMAPSS tables while RabbitMQ demonstrates the streaming path.
-          The same FD001-FD004 train, test, and RUL splits move through the ingestion flow.
-        </p>
-      </div>
-
-      <div className="metric-strip wide">
-        {resultMetrics.map((metric) => (
-          <div className={`metric ${metric.tone}`} key={metric.label}>
-            <strong>{metric.value}</strong>
-            <span>{metric.label}</span>
-          </div>
-        ))}
-      </div>
-
-      <div className="results-split">
-        <ResultChart />
-        <div className="counts-panel">
-          <div>
-            <span className="eyebrow">Dataset splits</span>
-            <h3>FD001-FD004 train, test, and RUL row counts.</h3>
-          </div>
-          <div className="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Dataset</th>
-                  <th>Train</th>
-                  <th>Test</th>
-                  <th>RUL</th>
-                </tr>
-              </thead>
-              <tbody>
-                {tableCounts.map(([dataset, train, test, rul]) => (
-                  <tr key={dataset}>
-                    <td>{dataset}</td>
-                    <td>{train}</td>
-                    <td>{test}</td>
-                    <td>{rul}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </section>
   );
@@ -322,8 +390,9 @@ export default function Home() {
 
   const content = {
     overview: <OverviewTab />,
+    data: <DataTab />,
+    models: <ModelsTab />,
     stack: <StackTab />,
-    demo: <DemoTab />,
     contribution: <ContributionTab />,
   };
 

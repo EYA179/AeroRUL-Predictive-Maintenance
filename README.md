@@ -97,7 +97,7 @@ The RabbitMQ consumer is a long-running worker. Stop it with `Ctrl+C` after the 
 
 ## Web Interface
 
-The `web_interface/` app presents the AeroRUL project as a Next.js site that can be hosted on Vercel. It includes the project overview, stack, workflow, results, and academic context.
+The `web_interface/` app presents the AeroRUL project as a Next.js site that can be hosted on Vercel. It includes the project overview, data pipeline, notebook-recorded model results, stack, and academic context.
 
 To deploy it on Vercel, set the project root to `web_interface/`, keep the build command as `npm run build`, and use the default Next.js output.
 
