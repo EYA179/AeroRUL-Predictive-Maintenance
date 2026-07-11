@@ -1,0 +1,14 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+.venv/
+venv/
+.idea/
+
+output_predictions/
+notebooks/models/
+web_interface/uploads/
+web_interface/node_modules/
+web_interface/.next/

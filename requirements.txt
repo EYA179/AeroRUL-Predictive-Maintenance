@@ -1,0 +1,10 @@
+pyarrow
+pandas
+sqlalchemy
+psycopg2
+scikit-learn
+pika
+xgboost
+flask
+lightgbm
+flask_cors
